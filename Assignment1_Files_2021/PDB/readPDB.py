@@ -87,30 +87,15 @@ def calculateDihedral(a1, a2, a3, a4):
 
     # calculate connecting vectors (bonds)
 
-    a = len(a1)
+    con_vector1 = [a2[i] - a1[i] for i in range(len(a1))]
+    con_vector2 = [a3[i] - a2[i] for i in range(len(a1))]
+    con_vector3 = [a4[i] - a3[i] for i in range(len(a1))]
 
-    # for plane 1
-    con_vector1 = [a2[i] - a1[i] for i in range(a)]
-    con_vector2 = [a3[i] - a1[i] for i in range(a)]
-    normal_vector_1 = cross_product(con_vector1,con_vector2)
+    sin_angle = magnitude(con_vector2) * dot_product(con_vector1, cross_product(con_vector2, con_vector3))
 
-    # for plane 2
-    con_vector3 = [a2[i] - a4[i] for i in range(a)]
-    con_vector4 = [a3[i] - a4[i] for i in range(a)]
-    normal_vector_2 = cross_product(con_vector3,con_vector4)
+    cos_angle = dot_product(cross_product(con_vector1, con_vector2), cross_product(con_vector2, con_vector3))
 
-    print(normal_vector_1, normal_vector_2)
-
-    # angle of the normal vectors
-    dot = dot_product(normal_vector_1, normal_vector_2)
-    cross = cross_product(normal_vector_1, normal_vector_2)
-    mag = magnitude(normal_vector_1) * magnitude(normal_vector_2)
-
-    cos_angle = dot / mag
-
-    sin_angle = magnitude(cross) / mag
-
-    angle = atan2(sin_angle, cos_angle)
+    angle = atan2(sin_angle,cos_angle)
 
     dihedral = degrees(angle)
 
@@ -124,11 +109,16 @@ def assign_ss(phi, psi):
     """ Assign a secondary structure type based on the phi
     and psi angles of a residue """
     ### START CODING HERE
-    # for code checking purposes use the terms "loop", "alpha" or "beta"
-    secondary_structure = "sda"
+    if phi <= 0:
+        if psi >= 0:
+            secondary_structure = 'beta'
+        elif psi <=0:
+            secondary_structure = "alpha"
+    else:
+        secondary_structure = "loop"
     ### END CODING HERE
     return secondary_structure
-# print(assign_ss(60, 25))
+print(assign_ss(55, 25))
 
 def print_phi_psi(pdbcoord, pdbseq, outfile):
     """ given the PDB coordinates, calculate the dihedral
