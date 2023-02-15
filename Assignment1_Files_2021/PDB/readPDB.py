@@ -77,15 +77,8 @@ def readPDB(PDB_file):
     return pdbcoord, pdbseq
 
 def calculateDihedral(a1, a2, a3, a4):
-    """ Calculates the normal vector of the planes
-    defined by four atom coordinates """
 
     ### START CODING HERE
-    # calculate normal vectors to the planes defined by a1,a2,a3 and a2,a3,a4
-    # you may use the functions "cross_product","dot_product" and "magnitude" defined above
-    # you can also use the python math function "atan2" and "degrees"
-
-    # calculate connecting vectors (bonds)
 
     con_vector1 = [a2[i] - a1[i] for i in range(len(a1))]
     con_vector2 = [a3[i] - a2[i] for i in range(len(a1))]
@@ -95,20 +88,7 @@ def calculateDihedral(a1, a2, a3, a4):
 
     cos_angle = dot_product(cross_product(con_vector1, con_vector2), cross_product(con_vector2, con_vector3))
 
-<<<<<<< HEAD
-    angle = atan2(sin_angle,cos_angle)
-=======
-    # angle of the normal vectors
-    dot = dot_product(normal_vector_1, normal_vector_2)
-    cross = cross_product(normal_vector_1, normal_vector_2)
-    mag = magnitude(normal_vector_1) * magnitude(normal_vector_2)
-
-    cos_angle = abs(dot) / mag
-
-    sin_angle = magnitude(cross) / mag
-
     angle = atan2(sin_angle, cos_angle)
->>>>>>> fd3971f (added)
 
     dihedral = degrees(angle)
 
@@ -122,7 +102,6 @@ def assign_ss(phi, psi):
     """ Assign a secondary structure type based on the phi
     and psi angles of a residue """
     ### START CODING HERE
-<<<<<<< HEAD
     if phi <= 0:
         if psi >= 0:
             secondary_structure = 'beta'
@@ -130,13 +109,10 @@ def assign_ss(phi, psi):
             secondary_structure = "alpha"
     else:
         secondary_structure = "loop"
-=======
-    # for code checking purposes use the terms "loop", "alpha" or "beta"
-    secondary_structure = ""
->>>>>>> fd3971f (added)
+
     ### END CODING HERE
     return secondary_structure
-print(assign_ss(55, 25))
+# print(assign_ss(55, 25))
 
 def print_phi_psi(pdbcoord, pdbseq, outfile):
     """ given the PDB coordinates, calculate the dihedral
@@ -146,21 +122,30 @@ def print_phi_psi(pdbcoord, pdbseq, outfile):
 
     # get the chains from the PDB file
     list_chains = sorted(pdbcoord.keys())
-
+    print(pdbcoord)
     for chain in list_chains:
         # get the sorted residue numbers from the pdbcoord dictionary
         list_residue_numbers = sorted(pdbcoord[chain].keys())
         for res_num in list_residue_numbers:
-            # if certain residues are missing in the PDB file, you will
-            # get a KeyError. Make sure your program does not crash, but
-            # gives a warning when this happens
             try:
                 ### START CODING HERE
-                phi, psi, ss = 0, 0, "test" # replace this line with your code
+
+                n_spot = pdbcoord[chain][res_num]['N']
+                pn_spot = pdbcoord[chain][res_num + 1]['N']
+                c_spot = pdbcoord[chain][res_num]['C']
+                nc_spot = pdbcoord[chain][res_num - 1]['C']
+                ca_spot = pdbcoord[chain][res_num]['CA']
+
+                phi = calculateDihedral(nc_spot, n_spot, ca_spot, c_spot)
+                psi = calculateDihedral(n_spot, ca_spot, c_spot, pn_spot)
+                ss = assign_ss(phi,psi)
                 ### END CODING HERE
 
             except KeyError:
                 print('WARNING: KeyError:', KeyError, 'in residue', chain, res_num)
+                phi = 0 
+                psi = 0
+                ss = 'NaN'
 
             # get amino acid
             aa_type = pdbseq[chain][res_num]
@@ -180,7 +165,7 @@ def main():
     # for i in ['1TIM', '3PG8']:
     #     f_in = '{}.pdb'.format(i)
     #     print(f_in)
-    #     f_out = '/home/banoffee/Documents/sb-//PDB/Output/phi_psi_{}.txt'.format(i)
+    #     f_out = 'student/output/phi_psi_{}.txt'.format(i)
     
     #     # read PDB file
     #     pdbcoord, pdbseq = readPDB(f_in)

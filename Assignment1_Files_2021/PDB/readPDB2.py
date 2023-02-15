@@ -1,8 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
-
-
-# Packages
 from sys import argv
 import os
 from math import sqrt, atan2, degrees
@@ -95,7 +92,7 @@ def calculateDihedral(a1, a2, a3, a4):
     u3 = [a4[0] - a3[0], a4[1] - a3[1], a4[2] - a3[2]]
 
     # calculate connecting vectors (bonds)
-    
+
     dihedral = degrees(atan2(magnitude(u2) * dot_product(u1, cross_product(u2, u3)), dot_product(cross_product(u1, u2), cross_product(u2, u3)))) # replace this line with your code
     ### END CODING HERE
     return dihedral
