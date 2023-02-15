@@ -95,7 +95,20 @@ def calculateDihedral(a1, a2, a3, a4):
 
     cos_angle = dot_product(cross_product(con_vector1, con_vector2), cross_product(con_vector2, con_vector3))
 
+<<<<<<< HEAD
     angle = atan2(sin_angle,cos_angle)
+=======
+    # angle of the normal vectors
+    dot = dot_product(normal_vector_1, normal_vector_2)
+    cross = cross_product(normal_vector_1, normal_vector_2)
+    mag = magnitude(normal_vector_1) * magnitude(normal_vector_2)
+
+    cos_angle = abs(dot) / mag
+
+    sin_angle = magnitude(cross) / mag
+
+    angle = atan2(sin_angle, cos_angle)
+>>>>>>> fd3971f (added)
 
     dihedral = degrees(angle)
 
@@ -109,6 +122,7 @@ def assign_ss(phi, psi):
     """ Assign a secondary structure type based on the phi
     and psi angles of a residue """
     ### START CODING HERE
+<<<<<<< HEAD
     if phi <= 0:
         if psi >= 0:
             secondary_structure = 'beta'
@@ -116,6 +130,10 @@ def assign_ss(phi, psi):
             secondary_structure = "alpha"
     else:
         secondary_structure = "loop"
+=======
+    # for code checking purposes use the terms "loop", "alpha" or "beta"
+    secondary_structure = ""
+>>>>>>> fd3971f (added)
     ### END CODING HERE
     return secondary_structure
 print(assign_ss(55, 25))
@@ -160,10 +178,10 @@ def main():
     print_phi_psi(pdbcoord, pdbseq, f_out)
     # for testing
     # for i in ['1TIM', '3PG8']:
-    #     f_in = 'student/{}.pdb'.format(i)
+    #     f_in = '{}.pdb'.format(i)
     #     print(f_in)
-    #     f_out = 'student/output/phi_psi_{}.txt'.format(i)
-    #
+    #     f_out = '/home/banoffee/Documents/sb-//PDB/Output/phi_psi_{}.txt'.format(i)
+    
     #     # read PDB file
     #     pdbcoord, pdbseq = readPDB(f_in)
     #     print_phi_psi(pdbcoord, pdbseq, f_out)
