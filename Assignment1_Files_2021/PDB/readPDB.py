@@ -96,7 +96,7 @@ def calculateDihedral(a1, a2, a3, a4):
 
     return dihedral
 
-# print(calculateDihedral([1, 9, 2], [3, 2, 1], [2, 4, 7], [8, 2, 5]))
+print(calculateDihedral([1, 9, 2], [3, 2, 1], [2, 4, 7], [8, 2, 5]))
 
 def assign_ss(phi, psi):
     """ Assign a secondary structure type based on the phi
@@ -122,7 +122,6 @@ def print_phi_psi(pdbcoord, pdbseq, outfile):
 
     # get the chains from the PDB file
     list_chains = sorted(pdbcoord.keys())
-    print(pdbcoord)
     for chain in list_chains:
         # get the sorted residue numbers from the pdbcoord dictionary
         list_residue_numbers = sorted(pdbcoord[chain].keys())
