@@ -1,22 +1,8 @@
 #!/usr/bin/python3
 
-"""
-Structural Bioinformatics assignment 1 - Phi-psi angles
+# Author: Nick Bounatsos
+# Student Number: 2768686
 
-When you finish the assignment, the script should create an
-output file containing the amino acid propensities to be buried
-in the protein core. Please ONLY modify the code in the two
-indicated blocks and do NOT use additional python packages. The
-commented #print() lines can be used to test separate functions
-but make sure that all of them are commented when submtting to
-CodeGrade.
-
-To run, make 'DSSP' your working directory and use:
-
-> python3 readDSSP.py Data/
-"""
-
-# Packages
 from sys import argv
 import os
 
@@ -35,6 +21,33 @@ def read_AccUnfold():
         unfolded_acc[splitline[0]] = float(splitline[2])
     f.close()
     return unfolded_acc
+
+def decide_if_buried(aa, acc, unfolded_acc):
+    """ Calculate the fraction of buried surface area. If this
+    fraction is less than seven percent, the amino acid is
+    considered buried """
+
+    """
+    The fraction of buried surface in a protein can be calculated using the following formula:
+    Fraction of buried surface = (Total solvent accessible surface area - Total exposed surface area) / Total solvent accessible surface area
+    Here, "solvent accessible surface area" (SASA) refers to the area of the protein surface that is accessible to solvent molecules, 
+    and "exposed surface area" (ESA) refers to the area of the protein surface that is exposed to solvent molecules. 
+    The difference between the total solvent accessible surface area and the total exposed surface area gives the total buried surface area.
+    """
+
+    buried = False
+    ### START CODING HERE
+    # normal amino acids
+    # print(aa)
+    # print(acc)
+    # print(unfolded_acc)
+    # print(unfolded_acc[aa])
+    fraction = acc/unfolded_acc[aa]
+    # print(fraction)
+    if fraction < 0.07: buried = True
+    # print(buried)
+    ### END CODING HERE
+    return buried
 
 def read_dir(d, unfolded_acc):
     """ For each DSSP file in the input directory, extract the
@@ -76,7 +89,12 @@ def read_dir(d, unfolded_acc):
                 # write conditional statements indicating what
                 # needs to happen with 'special' residues
 
+                if aa_type.islower():
+                    aa_type = aa_type.upper()
+
                 # skip unknown amino acids
+                if aa_type == 'X' or aa_type == 'B' or aa_type == 'J' or aa_type == 'O' or aa_type == 'U' or aa_type == 'Z':
+                    continue
 
                 ### END CODING HERE
 
@@ -105,19 +123,7 @@ def read_dir(d, unfolded_acc):
         f.close()
     # return dictionaries
     return all_aa_count, buried_aa_count
-#print(read_dir('Data\\DSSP_files_small_lib'))
-
-def decide_if_buried(aa, acc, unfolded_acc):
-    """ Calculate the fraction of buried surface area. If this
-    fraction is less than seven percent, the amino acid is
-    considered buried """
-
-    buried = False
-    ### START CODING HERE
-    # normal amino acids
-
-    ### END CODING HERE
-    return buried
+# print(read_dir('/home/banoffee/Documents/sb-project/Assignment1_Files_2021/DSSP/Data/DSSP_files_small_lib', read_AccUnfold()))
 
 def print_propensities(all_aa_count, buried_aa_count, outfile):
     """ For each amino acid, calculate the propensity to be
@@ -129,12 +135,32 @@ def print_propensities(all_aa_count, buried_aa_count, outfile):
     # you should calculate the propemsity for each amino acid type to be buried
     # you can use all_aa_count and buried_aa_count[aa]
     # you can use the following loop structure over all amino acids:
-    # for aa in list_aa:
-    #     ... all_aa_count[aa] ...
-    #     ... buried_aa_count[aa] ...
-    #
+
+    # print(all_aa_count)
+    # print(buried_aa_count)
+
+    # n_aa_s = []
+    # n_aa = []
+    n_total_s = sum(buried_aa_count.values())
+    n_total = sum(all_aa_count.values())
+
+    y = n_total_s / n_total
+
+    # print(list_aa)
+
+    for aa in list_aa:
+        x = buried_aa_count[aa] / all_aa_count[aa]
+
+        propensity_buried = x/y
+
+        # print(propensity_buried)
+
+        # pass
+    
+    # print(n_aa, n_aa_s)
+
     # to print to the output file you can use:
-    # print(aa, propensity_buried, file=f)
+        print(aa, propensity_buried, file=f)
 
     ### END CODING HERE
 
@@ -148,6 +174,7 @@ def main():
     unfolded_acc = read_AccUnfold()
     all_aa_count, buried_aa_count = read_dir(d_in, unfolded_acc)
     print_propensities(all_aa_count, buried_aa_count, outfile)
+    # print('Output to file ', outfile)
 
 if __name__ == '__main__':
     main()
