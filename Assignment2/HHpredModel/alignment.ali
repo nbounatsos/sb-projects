@@ -1,0 +1,10 @@
+>P1;5G3Q
+sequence:5G3Q:1    :1:79  :1::::
+-----------------------------RKMVTFKFDLDGDNPEEIATIMVNNDFILAIERESFVDQVREIIEKADEM*
+>P1;2LRU
+structure:2LRU:519 :A:568 :A::Rattus norvegicus::
+-----------------------------NEAIEFSFDLERDVPEDVAQEMVESGYVCEGDHKTMAKAIKDRVSLIKRK*
+
+prediction -> template 
+        VS
+prediction -> reference
